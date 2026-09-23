@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Results - RaktSetu</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #f9f9f9; }
+       .donor-card { background: white; padding: 15px; margin: 10px 0; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+       .blood { color: red; font-weight: bold; font-size: 20px; }
+        a { text-decoration: none; color: blue; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Donors for <span class="blood">{{ request.form['blood_group'] }}</span> in {{ request.form['city'] }}</h1>
+    <a href="/">← Back to Home</a>
+    <hr>
+
+    {% if donors %}
+        <p><b>{{ donors|length }} Donor(s) Found</b></p>
+        {% for donor in donors %}
+        <div class="donor-card">
+            <h3>{{ donor[1] }}</h3> 
+            <p>
+                <b>Blood Group:</b> <span class="blood">{{ donor[2] }}</span> <br>
+                <b>City:</b> {{ donor[3] }} <br>
+                <b>Contact:</b> {{ donor[4] }} <br>
+                {% if donor[5] %}<b>Age:</b> {{ donor[5] }} | {% endif %}
+                {% if donor[6] %}<b>Weight:</b> {{ donor[6] }} | {% endif %}
+                {% if donor[7] %}<b>Hemoglobin:</b> {{ donor[7] }} | {% endif %}
+                {% if donor[8] %}<b>Last Donation:</b> {{ donor[8] }}{% endif %}
+            </p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <h3>❌ No donors found for this blood group and city.</h3>
+        <p>Please try a different city or blood group.</p>
+    {% endif %}
+</body>
+</html>

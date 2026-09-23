@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>RaktSetu Patiala - Register Donor</title>
+    <style>
+        body {font-family: 'Segoe UI', Arial; background: #fff0f5; margin: 0; padding: 0;}
+
+        /* HEADER same as home */
+       .header {background: url('https://images.unsplash.com/photo-1615461066841-6116e61058f4?w=1200') center/cover;
+                 height: 200px; display: flex; align-items: center; justify-content: center; color: white; text-shadow: 2px 2px 4px #000;}
+       .header h1 {font-size: 32px; background: rgba(255,0,0,0.7); padding: 12px 25px; border-radius: 10px;}
+
+       .container {max-width: 600px; margin: -40px auto 20px auto; padding: 20px;}
+       .box {background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);}
+       .nav {text-align: left; margin-bottom: 20px;}
+       .nav a {background: #555; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px;}
+       .nav a:hover {background: #333;}
+
+        h2 {color: red; text-align: center; margin-bottom: 20px;}
+        label {font-weight: bold; color: #333;}
+        input, select {width: 95%; padding: 10px; margin: 8px 0 15px 0; border: 1px solid #ddd; border-radius: 5px;}
+        input:focus, select:focus {border-color: red; outline: none;}
+        button {width: 100%; background: red; color: white; padding: 14px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer;}
+        button:hover {background: darkred;}
+       .note {font-size: 12px; color: #666; text-align: center; margin-top: 15px;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🩸 RaktSetu Patiala 🩸</h1>
+    </div>
+
+    <div class="container">
+        <div class="box">
+            <div class="nav"><a href="/">← Back to Home</a></div>
+            
+            <h2>Add New Donor</h2>
+            <form action="/register" method="POST" enctype="multipart/form-data">
+                <label>Name *</label>
+                <input name="name" required placeholder="Enter Full Name">
+
+                <label>Blood Group *</label>
+                <select name="blood_group" required>
+                    <option value="">--Select--</option>
+                    <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+                    <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+                </select>
+
+                <label>City</label>
+                <input name="city" value="Patiala" placeholder="Patiala">
+
+                <label>Contact Number *</label>
+                <input name="contact" required placeholder="98XXXXXXXX">
+                <hr style="margin: 20px 0;">
+                <h3 style="color: red;">Eligibility Details *</h3>
+
+                <label>Age *</label>
+                <input type="number" name="age" min="18" required placeholder="Must be 18+">
+
+                <label>Weight in Kg *</label>
+                <input type="number" name="weight" step="0.1" min="45" required placeholder="Must be 45Kg+">
+
+                <label>Hemoglobin g/dL *</label>
+                <input type="number" name="hemoglobin" step="0.1" min="12.5" required placeholder="Must be 12.5+">
+
+                <label>Last Donation Date</label>
+                <input type="date" name="last_donation">
+                <small style="color: #666;">Minimum 3 months gap required</small>
+                <label>Upload Photo - Use Camera *</label>
+                <video id="camera" width="320" height="240" autoplay style="border:1px solid #ccc;"></video>
+                <br>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <button type="button" onclick="capturePhoto()">📷 Capture Photo</button>
+                <input type="hidden" name="photo" id="photo_data" required>
+                <hr style="margin: 20px 0;">
+
+<script>
+  // Page खुलते ही camera on
+  navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => { document.getElementById('camera').srcObject = stream; })
+  .catch(err => { alert("Camera Permission Denied: " + err) });
+
+  function capturePhoto(){
+    let canvas = document.getElementById('canvas');
+    let video = document.getElementById('camera');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video,0,0);
+    
+    let dataURL = canvas.toDataURL('image/jpeg');
+    document.getElementById('photo_data').value = dataURL;
+    alert("Photo Captured Successfully!");
+  }
+</script>
+                <p style="color: gray; font-size: 14px; margin-bottom: 10px;">* WBC, RBC, Platelets, Hemoglobin this section is optional</p>
+
+                <label>WBC</label>
+                <input type="number" step="0.1" name="wbc" placeholder="4.0 - 11.0">
+
+                <label>RBC</label>
+                <input type="number" step="0.1" name="rbc" placeholder="4.2 - 5.4">
+
+                <label>Platelets</label>
+                <input type="number" name="platelets" placeholder="150000 - 450000">
+
+                <label>Hemoglobin2</label>
+                <input type="number" step="0.1" name="hemoglobin" placeholder="12.0 - 16.0">
+                <hr style="margin: 20px 0;">
+                <h3 style="color: red;">ML Data for Eligibility Check</h3>
+
+                <label>Months Since Last Donation *</label>
+                <input type="number" name="recency" required placeholder="Ex: 2">
+
+                <label>Total Number of Donations *</label>
+                <input type="number" name="frequency" required placeholder="Ex: 5">
+
+                <p style="color: gray; font-size: 12px;">* This field is optional</p>
+                <label>Total Blood Donated in c.c (optional)</label>
+                <input type="number" name="monetary" optional placeholder="Ex: 1250">
+
+                <label>Months Since First Donation *</label>
+                <input type="number" name="time" required placeholder="Ex: 24">
+                <button type="submit">Check Eligibility and Submit Donor</button>
+                <p class="note">* Required Fields</p>
+                <p class="note" style="color: red; font-weight: bold;">
+                    Note: This is only a Demo/Sample system. Final eligibility will be decided by Doctor only.
+                </p>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
